@@ -237,3 +237,10 @@ Response
   "timestamp": "2025-01-01T12:00:00.000Z"
 }
 ```
+
+
+
+```````
+curl http://localhost:3000/garage
+mvnw.cmd spring-boot:run
+curl -X POST http://localhost:3003/admin/import-garage
