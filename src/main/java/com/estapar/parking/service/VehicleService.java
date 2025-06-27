@@ -35,13 +35,11 @@ public class VehicleService {
         String plate = event.getLicense_plate();
         LocalDateTime entryTime = LocalDateTime.parse(event.getEntry_time(), formatter);
 
-        // Encontrar o setor com vagas disponíveis
         Sector setorEscolhido = sectorRepo.findAll().stream()
                 .filter(this::temVagasDisponiveis)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Nenhum setor disponível"));
 
-        // Encontrar um spot livre dentro do setor
         Optional<Spot> optionalSpot = spotRepo.findAll().stream()
                 .filter(s -> s.getSector().getName().equals(setorEscolhido.getName()) && !s.isOccupied())
                 .findFirst();
@@ -67,7 +65,6 @@ public class VehicleService {
         vehicleEntryRepo.save(ve);
     }
 
-
     private void handleParked(WebhookEventDTO event) {
         String plate = event.getLicense_plate();
         Double lat = event.getLat();
@@ -81,7 +78,14 @@ public class VehicleService {
         if (optional.isPresent()) {
             VehicleEntry ve = optional.get();
             ve.setSpot(spot);
-            ve.setParkedTime(LocalDateTime.now());
+
+            // Define o parkedTime como entryTime + 10 segundos
+            if (ve.getEntryTime() != null) {
+                ve.setParkedTime(ve.getEntryTime().plusSeconds(10));
+            } else {
+                ve.setParkedTime(LocalDateTime.now());
+            }
+
             vehicleEntryRepo.save(ve);
         }
     }

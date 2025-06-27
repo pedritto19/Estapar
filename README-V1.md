@@ -244,3 +244,7 @@ Response
 curl http://localhost:3000/garage
 mvnw.cmd spring-boot:run
 curl -X POST http://localhost:3003/admin/import-garage
+curl -X GET http://localhost:3003/revenue -H "Content-Type: application/json" -d "{\"date\": \"2025-06-26\", \"sector\": \"A\"}"
+curl -X GET http://localhost:3003/revenue -H "Content-Type: application/json" -d "{\"date\": \"2025-06-26\", \"sector\": \"B\"}"
+
+
